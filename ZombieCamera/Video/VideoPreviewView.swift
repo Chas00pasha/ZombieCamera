@@ -5,6 +5,15 @@ import UIKit
 /// Delivers frames directly to the preview layer, bypassing SwiftUI state diffing.
 final class VideoPreviewSink {
     weak var view: PreviewUIView?
+    var rotationQuarterTurns = 1
+
+    func setRotationQuarterTurns(_ turns: Int) {
+        rotationQuarterTurns = VideoRotation.normalizedQuarterTurns(turns)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.view?.setRotationQuarterTurns(self.rotationQuarterTurns)
+        }
+    }
 
     func display(_ pixelBuffer: CVPixelBuffer) {
         DispatchQueue.main.async { [weak self] in
@@ -25,16 +34,20 @@ struct VideoPreviewView: UIViewRepresentable {
     func makeUIView(context: Context) -> PreviewUIView {
         let view = PreviewUIView()
         sink.view = view
+        view.setRotationQuarterTurns(sink.rotationQuarterTurns)
         return view
     }
 
     func updateUIView(_ uiView: PreviewUIView, context: Context) {
         sink.view = uiView
+        uiView.setRotationQuarterTurns(sink.rotationQuarterTurns)
     }
 }
 
 final class PreviewUIView: UIView {
+    private let rotatedContainer = UIView()
     private let displayLayer = AVSampleBufferDisplayLayer()
+    private var rotationQuarterTurns = 0
     private var frameIndex: Int64 = 0
     private let timescale: Int32 = 30
 
@@ -42,7 +55,9 @@ final class PreviewUIView: UIView {
         super.init(frame: frame)
         backgroundColor = .black
         displayLayer.videoGravity = .resizeAspectFill
-        layer.addSublayer(displayLayer)
+        rotatedContainer.backgroundColor = .clear
+        rotatedContainer.layer.addSublayer(displayLayer)
+        addSubview(rotatedContainer)
     }
 
     @available(*, unavailable)
@@ -50,9 +65,19 @@ final class PreviewUIView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func setRotationQuarterTurns(_ turns: Int) {
+        rotationQuarterTurns = VideoRotation.normalizedQuarterTurns(turns)
+        setNeedsLayout()
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        displayLayer.frame = bounds
+        VideoRotation.applyPreviewLayout(
+            container: rotatedContainer,
+            displayLayer: displayLayer,
+            in: bounds,
+            quarterTurns: rotationQuarterTurns
+        )
     }
 
     func flush() {

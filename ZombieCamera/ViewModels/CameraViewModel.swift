@@ -18,9 +18,11 @@ final class CameraViewModel: ObservableObject {
     private let client = CameraStreamClient()
     private let pipeline = H264Pipeline()
     private let recorder = VideoRecorder()
-    private var previewSize: CGSize?
+    private var naturalFrameSize: CGSize?
 
     init() {
+        previewSink.setRotationQuarterTurns(rotationQuarterTurns)
+
         client.onStatus = { [weak self] status in
             Task { @MainActor in
                 self?.status = status
@@ -47,9 +49,9 @@ final class CameraViewModel: ObservableObject {
     }
 
     func connect() {
-        pipeline.setRotationQuarterTurns(rotationQuarterTurns)
         pipeline.reset()
         previewSink.flush()
+        previewSink.setRotationQuarterTurns(rotationQuarterTurns)
         client.connect(config: config)
     }
 
@@ -81,7 +83,7 @@ final class CameraViewModel: ObservableObject {
 
     func cycleRotation() {
         rotationQuarterTurns = (rotationQuarterTurns + 1) % 4
-        pipeline.setRotationQuarterTurns(rotationQuarterTurns)
+        previewSink.setRotationQuarterTurns(rotationQuarterTurns)
     }
 
     var rotationDegrees: Int {
@@ -89,13 +91,16 @@ final class CameraViewModel: ObservableObject {
     }
 
     private func startRecording() {
-        guard let size = previewSize else {
+        guard let naturalFrameSize else {
             alertMessage = "Wait for the first video frame before recording"
             return
         }
 
         do {
-            try recorder.start(size: size)
+            try recorder.start(
+                naturalSize: naturalFrameSize,
+                rotationQuarterTurns: rotationQuarterTurns
+            )
             isRecording = true
             status = "Recording..."
         } catch {
@@ -132,7 +137,7 @@ final class CameraViewModel: ObservableObject {
     private func handleFrame(_ buffer: CVPixelBuffer) {
         let width = CGFloat(CVPixelBufferGetWidth(buffer))
         let height = CGFloat(CVPixelBufferGetHeight(buffer))
-        previewSize = CGSize(width: width, height: height)
+        naturalFrameSize = CGSize(width: width, height: height)
         previewSink.display(buffer)
 
         if recorder.isRecording {

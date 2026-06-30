@@ -7,13 +7,13 @@ final class VideoRecorder {
     private var writer: AVAssetWriter?
     private var input: AVAssetWriterInput?
     private var adaptor: AVAssetWriterInputPixelBufferAdaptor?
-    private var startTime: CMTime?
     private var frameCount: Int64 = 0
     private let fps: Int32 = 15
+    private var outputURL: URL?
 
     var isRecording: Bool { writer != nil }
 
-    func start(size: CGSize) throws {
+    func start(naturalSize: CGSize, rotationQuarterTurns: Int) throws {
         let fileName = "camera_\(Int(Date().timeIntervalSince1970)).mp4"
         let url = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 
@@ -24,17 +24,21 @@ final class VideoRecorder {
         let writer = try AVAssetWriter(outputURL: url, fileType: .mp4)
         let settings: [String: Any] = [
             AVVideoCodecKey: AVVideoCodecType.h264,
-            AVVideoWidthKey: Int(size.width),
-            AVVideoHeightKey: Int(size.height)
+            AVVideoWidthKey: Int(naturalSize.width),
+            AVVideoHeightKey: Int(naturalSize.height)
         ]
 
         let input = AVAssetWriterInput(mediaType: .video, outputSettings: settings)
         input.expectsMediaDataInRealTime = true
+        input.transform = VideoRotation.writerTransform(
+            quarterTurns: rotationQuarterTurns,
+            naturalSize: naturalSize
+        )
 
         let sourceAttributes: [String: Any] = [
             kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
-            kCVPixelBufferWidthKey as String: Int(size.width),
-            kCVPixelBufferHeightKey as String: Int(size.height)
+            kCVPixelBufferWidthKey as String: Int(naturalSize.width),
+            kCVPixelBufferHeightKey as String: Int(naturalSize.height)
         ]
         let adaptor = AVAssetWriterInputPixelBufferAdaptor(
             assetWriterInput: input,
@@ -52,12 +56,9 @@ final class VideoRecorder {
         self.writer = writer
         self.input = input
         self.adaptor = adaptor
-        self.startTime = nil
         self.frameCount = 0
         self.outputURL = url
     }
-
-    private var outputURL: URL?
 
     func append(pixelBuffer: CVPixelBuffer) {
         guard let writer, let input, let adaptor, writer.status == .writing else { return }

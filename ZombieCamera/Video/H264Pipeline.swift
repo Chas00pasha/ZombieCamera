@@ -1,4 +1,3 @@
-import CoreImage
 import CoreMedia
 import CoreVideo
 import VideoToolbox
@@ -8,19 +7,10 @@ final class H264Pipeline {
     private var buffer = Data()
     private var formatDescription: CMFormatDescription?
     private var decompressionSession: VTDecompressionSession?
-    private var rotationQuarterTurns = 0
     private var sps: Data?
     private var pps: Data?
 
-    private let ciContext = CIContext(options: nil)
-
     var onPixelBuffer: ((CVPixelBuffer) -> Void)?
-
-    func setRotationQuarterTurns(_ turns: Int) {
-        queue.async {
-            self.rotationQuarterTurns = turns % 4
-        }
-    }
 
     func reset() {
         queue.async {
@@ -218,53 +208,7 @@ final class H264Pipeline {
     }
 
     fileprivate func handleDecodedFrame(_ imageBuffer: CVImageBuffer) {
-        queue.async {
-            let turns = self.rotationQuarterTurns % 4
-            let output = turns == 0
-                ? imageBuffer
-                : (self.rotatePixelBuffer(imageBuffer, quarterTurns: turns) ?? imageBuffer)
-            self.onPixelBuffer?(output)
-        }
-    }
-
-    private func rotatePixelBuffer(_ buffer: CVPixelBuffer, quarterTurns: Int) -> CVPixelBuffer? {
-        let srcWidth = CVPixelBufferGetWidth(buffer)
-        let srcHeight = CVPixelBufferGetHeight(buffer)
-
-        let orientation: CGImagePropertyOrientation
-        let outputWidth: Int
-        let outputHeight: Int
-
-        switch quarterTurns {
-        case 1:
-            orientation = .right
-            outputWidth = srcHeight
-            outputHeight = srcWidth
-        case 2:
-            orientation = .down
-            outputWidth = srcWidth
-            outputHeight = srcHeight
-        case 3:
-            orientation = .left
-            outputWidth = srcHeight
-            outputHeight = srcWidth
-        default:
-            return buffer
-        }
-
-        let image = CIImage(cvPixelBuffer: buffer).oriented(orientation)
-        var output: CVPixelBuffer?
-        CVPixelBufferCreate(
-            kCFAllocatorDefault,
-            outputWidth,
-            outputHeight,
-            kCVPixelFormatType_32BGRA,
-            nil,
-            &output
-        )
-        guard let output else { return nil }
-        ciContext.render(image, to: output)
-        return output
+        onPixelBuffer?(imageBuffer)
     }
 
     private func annexBUnitToAVCC(_ unit: Data) -> Data {

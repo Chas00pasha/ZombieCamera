@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04C244192FF40010005CC1C3 /* VideoRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C2441A2FF40010005CC1C3 /* VideoRotation.swift */; };
 		04C244172FF4000E005CC1C3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C244162FF4000E005CC1C3 /* SettingsView.swift */; };
 		04C244012FF40001005CC1C3 /* CameraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C244002FF40001005CC1C3 /* CameraConfig.swift */; };
 		04C244032FF40002005CC1C3 /* CameraHandshake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C244022FF40002005CC1C3 /* CameraHandshake.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04C2441A2FF40010005CC1C3 /* VideoRotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRotation.swift; sourceTree = "<group>"; };
 		04C244162FF4000E005CC1C3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		04C244002FF40001005CC1C3 /* CameraConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraConfig.swift; sourceTree = "<group>"; };
 		04C244022FF40002005CC1C3 /* CameraHandshake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHandshake.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				04C244082FF40005005CC1C3 /* H264Pipeline.swift */,
+				04C2441A2FF40010005CC1C3 /* VideoRotation.swift */,
 				04C2440A2FF40006005CC1C3 /* VideoRecorder.swift */,
 				04C2440C2FF40007005CC1C3 /* VideoPreviewView.swift */,
 			);
@@ -337,6 +340,7 @@
 				04C2440D2FF40007005CC1C3 /* VideoPreviewView.swift in Sources */,
 				04C2440F2FF40008005CC1C3 /* CameraViewModel.swift in Sources */,
 				04C244172FF4000E005CC1C3 /* SettingsView.swift in Sources */,
+				04C244192FF40010005CC1C3 /* VideoRotation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,6 +503,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZombieCamera/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ZombieCamera;
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Подключение к IP-камере в локальной Wi-Fi сети";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Сохранение записанного видео в Фото";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -511,7 +516,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pavel.ZombieCamera;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chas00pasha.ZombieCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -531,6 +536,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZombieCamera/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ZombieCamera;
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Подключение к IP-камере в локальной Wi-Fi сети";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Сохранение записанного видео в Фото";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -543,7 +549,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pavel.ZombieCamera;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chas00pasha.ZombieCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -562,7 +568,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pavel.ZombieCameraTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chas00pasha.ZombieCameraTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -582,7 +588,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pavel.ZombieCameraTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chas00pasha.ZombieCameraTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -600,7 +606,7 @@
 				DEVELOPMENT_TEAM = 9N442JS93N;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pavel.ZombieCameraUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chas00pasha.ZombieCameraUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -618,7 +624,7 @@
 				DEVELOPMENT_TEAM = 9N442JS93N;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pavel.ZombieCameraUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chas00pasha.ZombieCameraUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
