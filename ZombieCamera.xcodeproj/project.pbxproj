@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04C2441C2FF40011005CC1C3 /* MicrophoneCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C2441B2FF40011005CC1C3 /* MicrophoneCapture.swift */; };
 		04C244192FF40010005CC1C3 /* VideoRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C2441A2FF40010005CC1C3 /* VideoRotation.swift */; };
 		04C244172FF4000E005CC1C3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C244162FF4000E005CC1C3 /* SettingsView.swift */; };
 		04C244012FF40001005CC1C3 /* CameraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C244002FF40001005CC1C3 /* CameraConfig.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04C2441B2FF40011005CC1C3 /* MicrophoneCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneCapture.swift; sourceTree = "<group>"; };
 		04C2441A2FF40010005CC1C3 /* VideoRotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRotation.swift; sourceTree = "<group>"; };
 		04C244162FF4000E005CC1C3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		04C244002FF40001005CC1C3 /* CameraConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraConfig.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			children = (
 				04C244082FF40005005CC1C3 /* H264Pipeline.swift */,
 				04C2441A2FF40010005CC1C3 /* VideoRotation.swift */,
+				04C2441B2FF40011005CC1C3 /* MicrophoneCapture.swift */,
 				04C2440A2FF40006005CC1C3 /* VideoRecorder.swift */,
 				04C2440C2FF40007005CC1C3 /* VideoPreviewView.swift */,
 			);
@@ -341,6 +344,7 @@
 				04C2440F2FF40008005CC1C3 /* CameraViewModel.swift in Sources */,
 				04C244172FF4000E005CC1C3 /* SettingsView.swift in Sources */,
 				04C244192FF40010005CC1C3 /* VideoRotation.swift in Sources */,
+				04C2441C2FF40011005CC1C3 /* MicrophoneCapture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,6 +509,7 @@
 				INFOPLIST_FILE = ZombieCamera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ZombieCamera;
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Подключение к IP-камере в локальной Wi-Fi сети";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Запись звука с микрофона iPhone или подключённой гарнитуры";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Сохранение записанного видео в Фото";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -538,6 +543,7 @@
 				INFOPLIST_FILE = ZombieCamera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ZombieCamera;
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Подключение к IP-камере в локальной Wi-Fi сети";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Запись звука с микрофона iPhone или подключённой гарнитуры";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Сохранение записанного видео в Фото";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
