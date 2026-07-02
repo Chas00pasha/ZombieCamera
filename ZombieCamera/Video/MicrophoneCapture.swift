@@ -12,7 +12,7 @@ final class MicrophoneCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDel
         try audioSession.setCategory(
             .playAndRecord,
             mode: .videoRecording,
-            options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothHFP]
+            options: [.defaultToSpeaker, .allowBluetoothHFP]
         )
         try audioSession.setActive(true)
 

@@ -139,32 +139,37 @@ final class VideoRecorder {
         writer.finishWriting { [weak self] in
             guard let self else { return }
 
-            if writer.status == .completed, self.frameCount > 0 {
-                if self.validateVideoFile(at: url) {
-                    completion(.success(url))
+            Task {
+                let result: Result<URL, Error>
+                if writer.status == .completed, self.frameCount > 0 {
+                    if await self.validateVideoFile(at: url) {
+                        result = .success(url)
+                    } else {
+                        result = .failure(NSError(domain: "VideoRecorder", code: 6, userInfo: [
+                            NSLocalizedDescriptionKey: "Recorded file is invalid or empty"
+                        ]))
+                    }
+                } else if self.frameCount == 0 {
+                    result = .failure(NSError(domain: "VideoRecorder", code: 7, userInfo: [
+                        NSLocalizedDescriptionKey: "No video frames were recorded"
+                    ]))
                 } else {
-                    completion(.failure(NSError(domain: "VideoRecorder", code: 6, userInfo: [
-                        NSLocalizedDescriptionKey: "Recorded file is invalid or empty"
-                    ])))
+                    result = .failure(writer.error ?? NSError(domain: "VideoRecorder", code: 3))
                 }
-            } else if self.frameCount == 0 {
-                completion(.failure(NSError(domain: "VideoRecorder", code: 7, userInfo: [
-                    NSLocalizedDescriptionKey: "No video frames were recorded"
-                ])))
-            } else {
-                completion(.failure(writer.error ?? NSError(domain: "VideoRecorder", code: 3)))
-            }
 
-            self.writer = nil
-            self.videoInput = nil
-            self.audioInput = nil
-            self.adaptor = nil
-            self.outputURL = nil
-            self.sessionStartTime = nil
+                self.writer = nil
+                self.videoInput = nil
+                self.audioInput = nil
+                self.adaptor = nil
+                self.outputURL = nil
+                self.sessionStartTime = nil
+
+                completion(result)
+            }
         }
     }
 
-    private func validateVideoFile(at url: URL) -> Bool {
+    private func validateVideoFile(at url: URL) async -> Bool {
         guard let attributes = try? FileManager.default.attributesOfItem(atPath: url.path),
               let fileSize = attributes[.size] as? NSNumber,
               fileSize.intValue > 1024 else {
@@ -172,18 +177,27 @@ final class VideoRecorder {
         }
 
         let asset = AVURLAsset(url: url)
-        return asset.isPlayable && CMTimeGetSeconds(asset.duration) > 0.1
+        guard let isPlayable = try? await asset.load(.isPlayable),
+              isPlayable,
+              let duration = try? await asset.load(.duration),
+              duration.seconds > 0.1 else {
+            return false
+        }
+        return true
     }
 
     func saveToPhotoLibrary(url: URL, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard validateVideoFile(at: url) else {
-            completion(.failure(NSError(domain: "VideoRecorder", code: 8, userInfo: [
-                NSLocalizedDescriptionKey: "Cannot save invalid video to Photos"
-            ])))
-            return
-        }
+        Task {
+            guard await validateVideoFile(at: url) else {
+                await MainActor.run {
+                    completion(.failure(NSError(domain: "VideoRecorder", code: 8, userInfo: [
+                        NSLocalizedDescriptionKey: "Cannot save invalid video to Photos"
+                    ])))
+                }
+                return
+            }
 
-        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+            PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
             guard status == .authorized || status == .limited else {
                 completion(.failure(NSError(domain: "VideoRecorder", code: 4, userInfo: [
                     NSLocalizedDescriptionKey: "Photo library access denied"

@@ -508,6 +508,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZombieCamera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ZombieCamera;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Системный модуль записи звука требует это разрешение. Камера iPhone для съёмки не используется — видео идёт с IP-камеры по Wi-Fi.";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Подключение к IP-камере в локальной Wi-Fi сети";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Запись звука с микрофона iPhone или подключённой гарнитуры";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Сохранение записанного видео в Фото";
@@ -542,6 +543,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZombieCamera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ZombieCamera;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Системный модуль записи звука требует это разрешение. Камера iPhone для съёмки не используется — видео идёт с IP-камеры по Wi-Fi.";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Подключение к IP-камере в локальной Wi-Fi сети";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Запись звука с микрофона iPhone или подключённой гарнитуры";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Сохранение записанного видео в Фото";
