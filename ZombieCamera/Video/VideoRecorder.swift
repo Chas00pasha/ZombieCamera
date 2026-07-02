@@ -30,14 +30,15 @@ final class VideoRecorder {
         }
 
         let writer = try AVAssetWriter(outputURL: url, fileType: .mp4)
+        let compressionProperties: [String: Any] = [
+            AVVideoAverageBitRateKey: 2_500_000,
+            AVVideoProfileLevelKey: AVVideoProfileLevelH264HighAutoLevel
+        ]
         let videoSettings: [String: Any] = [
             AVVideoCodecKey: AVVideoCodecType.h264,
             AVVideoWidthKey: width,
             AVVideoHeightKey: height,
-            AVVideoCompressionPropertiesKey: [
-                AVVideoAverageBitRateKey: 2_500_000,
-                AVVideoProfileLevelKey: AVVideoProfileLevelH264HighAutoLevel
-            ]
+            AVVideoCompressionPropertiesKey: compressionProperties
         ]
 
         let videoInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
@@ -198,29 +199,30 @@ final class VideoRecorder {
             }
 
             PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
-            guard status == .authorized || status == .limited else {
-                completion(.failure(NSError(domain: "VideoRecorder", code: 4, userInfo: [
-                    NSLocalizedDescriptionKey: "Photo library access denied"
-                ])))
-                return
-            }
-
-            PHPhotoLibrary.shared().performChanges({
-                let request = PHAssetCreationRequest.forAsset()
-                request.addResource(with: .video, fileURL: url, options: nil)
-            }, completionHandler: { success, error in
-                DispatchQueue.main.async {
-                    if let error {
-                        completion(.failure(error))
-                    } else if success {
-                        completion(.success(()))
-                    } else {
-                        completion(.failure(NSError(domain: "VideoRecorder", code: 5, userInfo: [
-                            NSLocalizedDescriptionKey: "Photos save failed"
-                        ])))
-                    }
+                guard status == .authorized || status == .limited else {
+                    completion(.failure(NSError(domain: "VideoRecorder", code: 4, userInfo: [
+                        NSLocalizedDescriptionKey: "Photo library access denied"
+                    ])))
+                    return
                 }
-            })
+
+                PHPhotoLibrary.shared().performChanges({
+                    let request = PHAssetCreationRequest.forAsset()
+                    request.addResource(with: .video, fileURL: url, options: nil)
+                }, completionHandler: { success, error in
+                    DispatchQueue.main.async {
+                        if let error {
+                            completion(.failure(error))
+                        } else if success {
+                            completion(.success(()))
+                        } else {
+                            completion(.failure(NSError(domain: "VideoRecorder", code: 5, userInfo: [
+                                NSLocalizedDescriptionKey: "Photos save failed"
+                            ])))
+                        }
+                    }
+                })
+            }
         }
     }
 

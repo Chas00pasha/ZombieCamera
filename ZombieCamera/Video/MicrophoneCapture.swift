@@ -7,12 +7,19 @@ final class MicrophoneCapture: NSObject, AVCaptureAudioDataOutputSampleBufferDel
 
     var onAudioSample: ((CMSampleBuffer) -> Void)?
 
+    private var audioSessionOptions: AVAudioSession.CategoryOptions {
+        var options: AVAudioSession.CategoryOptions = [.defaultToSpeaker]
+        // .allowBluetoothHFP есть только в новых SDK; .allowBluetooth работает на Xcode 14+ и с BT-петличками
+        options.insert(.allowBluetooth)
+        return options
+    }
+
     func start() throws {
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(
             .playAndRecord,
             mode: .videoRecording,
-            options: [.defaultToSpeaker, .allowBluetoothHFP]
+            options: audioSessionOptions
         )
         try audioSession.setActive(true)
 
